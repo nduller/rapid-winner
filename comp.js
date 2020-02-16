@@ -38,6 +38,19 @@ class Competition {
     }
 }
 
+async function checkIsVisitable(entryOption){
+    const textElement = await entryOption.$('.text.user-links.entry-method-title.ng-scope');
+    const text = await textElement.evaluate(element => element.innerText);
+    const splitText = text.split(" ");
+    console.log(splitText[0])
+    if (splitText[0] === "Visit"){
+        return true;
+    } else {
+        return false;
+    }
+}
+
+
 
 async function handleGleam(page) {
     console.log('hi')
@@ -72,8 +85,19 @@ async function handleGleam(page) {
     await gleamFullNameElement.type('Hi it my name lmao')
     const gleamEmailElement = await page.$('.contestant-form-group .form-wrapper input[name="email"');
     await gleamEmailElement.type('lmaoemail@gmail.com')
-    const gleamSaveElement = await page.$('form.contestant div.form-actions button.btn-primary')
-    await gleamSaveElement.click();
+    await page.waitForSelector('[ng-click="setContestant()"]', {visible: true})
+    const gleamSaveElementList = await page.$('[ng-click="setContestant()"]');
+    await page.waitFor(1000)
+    await gleamSaveElementList.click();
+    await page.waitFor(1000);
+    await page.waitForSelector('.entry-content.ng-scope');
+    const entryContent = await page.$$('.entry-content.ng-scope div[id][ng-class]');
+    for (let i = 0; i < entryContent.length; i++) {
+        if (await checkIsVisitable(entryContent[i])){
+            console.log('EASY PEASY LEMON PEASY');
+        }
+
+    }
     await page.waitFor(10000)
 
 
