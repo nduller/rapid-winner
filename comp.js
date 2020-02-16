@@ -64,7 +64,7 @@ async function handleGleam(page) {
     const browser = await puppeteer.launch({headless: false});
     const page = await browser.newPage();
     //let compUrl = 'https://gleam.io/LbqWK/win-a-surface-pro-x-signature-keyboard-and-slim-pen-from-windows-central';
-    let compUrl = 'https://gleam.io/d2Whx/msi-optix-mpg27cq2-qhd-curved-gaming-monitor'
+    let compUrl = 'https://wn.nr/mV4cv8 '
     console.log('CHROME COOKIES:')
     console.log(cookies)
     cookies.push({
@@ -80,7 +80,37 @@ async function handleGleam(page) {
     await page.setCookie(...cookies);
     await page.goto(compUrl, {waitUntil : ['load', 'domcontentloaded']});
     console.log((await page.cookies(compUrl)));
-    const gleamEmailButtonElement = await page.$(".entry-content .click-blocks .email-background.popup-window");
+   
+    //BOL START
+    await page.evaluate(() => {
+        let html = document.querySelector('html');
+        html.style.overflow = "auto"
+    });
+
+     const gleamEmailButtonElement = await page.$("form.contestant .email-background");
+    await gleamEmailButtonElement.click();
+     const gleamFullNameElement = await page.$('.contestant-form-group .form-wrapper input[name="name"');
+    const randomString = Math.random().toString(36).substring(7);
+    await gleamFullNameElement.type(randomString)
+    const gleamEmailElement = await page.$('.contestant-form-group .form-wrapper input[name="email"');
+    await gleamEmailElement.type(randomString + '@gmail.com')
+    const gleamDOBElement = await page.$('[placeholder="DD/MM/YYYY"]');
+    await gleamEmailElement.type('12/12/1999')
+
+    await page.waitForSelector('[ng-click="setContestant()"]', {visible: true})
+    const gleamSaveElementList = await page.$('[ng-click="setContestant()"]');
+    await page.waitFor(1000)
+    await gleamSaveElementList.click();
+    await page.waitFor(1000);
+    await page.waitForSelector('.entry-content.ng-scope');
+    const entryContent = await page.$$('.entry-content.ng-scope div[id][ng-class]')
+    await entryContent[0].click()
+    await page.waitFor(2000);
+    await page.close()
+
+    //END BOL
+    
+    /*const gleamEmailButtonElement = await page.$(".entry-content .click-blocks .email-background.popup-window");
     await gleamEmailButtonElement.click();
     const gleamFullNameElement = await page.$('.contestant-form-group .form-wrapper input[name="name"');
     await gleamFullNameElement.type('H sddfid yet')
@@ -92,7 +122,8 @@ async function handleGleam(page) {
     await gleamSaveElementList.click();
     await page.waitFor(1000);
     await page.waitForSelector('.entry-content.ng-scope');
-    const entryContent = await page.$$('.entry-content.ng-scope div[id][ng-class]');
+    const entryContent = await page.$$('.entry-content.ng-scope div[id][ng-class]')
+    ;
     for (let i = 0; i < entryContent.length; i++) {
         if (await checkIsVisitable(entryContent[i])){
             let entryAnchor = await entryContent[i].$('a.enter-link');
@@ -114,7 +145,7 @@ async function handleGleam(page) {
 
     }
     await page.waitFor(10000)
-
+*/
 
     /*    await page.goto('https://www.ozbargain.com.au/competition');
 
