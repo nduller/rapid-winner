@@ -94,7 +94,8 @@ async function handleGleam(page) {
     const entryContent = await page.$$('.entry-content.ng-scope div[id][ng-class]');
     for (let i = 0; i < entryContent.length; i++) {
         if (await checkIsVisitable(entryContent[i])){
-            console.log('EASY PEASY LEMON PEASY');
+           let entryAnchor = await entryContent[i].$('a.enter-link');
+           await entryAnchor.click();
         }
 
     }
